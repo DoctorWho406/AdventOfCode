@@ -1,2 +1,6 @@
 # AdventOfCode
-Solutions for AdventOfCode [https://adventofcode.com/2023/day/1]
+
+Personal solutions for [Advent Of Code](https://adventofcode.com).
+
+## Years
+- [ ] [2023](/2023/)
