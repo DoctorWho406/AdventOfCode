@@ -1,5 +1,4 @@
 import os
-import re
 import sys
 
 global debug
@@ -43,10 +42,8 @@ class SimpleParser():
 
     def find_number(self, line: str, start: bool) -> int:
         for char in line if start else reversed(line):
-            try:
+            if char.isdigit():
                 return int(char)
-            except ValueError:
-                pass
 
     def get_calibration_sum(self):
         return sum(self.calibrations)
@@ -54,7 +51,7 @@ class SimpleParser():
 
 class ComplexParser(SimpleParser):
     def __init__(self, file_path: str) -> None:
-        self.literal_number = [
+        self.literal_numbers = [
             'zero',
             'one',
             'two',
@@ -72,13 +69,23 @@ class ComplexParser(SimpleParser):
         return file_path.replace('input.txt', 'Python/output_complex.txt')
 
     def find_number(self, line: str, start: bool) -> int:
-        regex = f"(\d|{'|'.join(self.literal_number)})" + (
-            "" if start else f"(?!.*(\d|{'|'.join(self.literal_number)}))")
-        match = re.search(regex, line)
-        try:
-            return int(match.group())
-        except ValueError:
-            return self.literal_number.index(match.group())
+        indexes = dict[int, int]()
+        for number in range(len(self.literal_numbers)):
+            string_index = line.find(self.literal_numbers[number]) if start else line.rfind(
+                self.literal_numbers[number])
+            number_index = line.find(
+                str(number)) if start else line.rfind(str(number))
+            if string_index != -1 or number_index != -1:
+                if start:
+                    if string_index == -1:
+                        indexes[number] = number_index
+                    elif number_index == -1:
+                        indexes[number] = string_index
+                    else:
+                        indexes[number] = min(string_index, number_index)
+                else:
+                    indexes[number] = max(string_index, number_index)
+        return min(indexes, key=indexes.get) if start else max(indexes, key=indexes.get)
 
 
 if __name__ == '__main__':
