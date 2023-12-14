@@ -68,8 +68,7 @@ class Schema():
 if __name__ == '__main__':
     # input: The relative path of input file
     # Ex: '2023\Day03\input.txt'
-    # file_path = input('Relative path of input file: ')
-    file_path = '2023\Day03\input.txt'
+    file_path = input('Relative path of input file: ')
     s = Schema(file_path)
     print(f'Sum of all parts: {s.get_sum()}')
     print(f'Sum of all gear ratios: {s.get_gears()}')
